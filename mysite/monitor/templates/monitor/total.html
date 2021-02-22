@@ -1,0 +1,38 @@
+{% extends "monitor/base.html" %}
+{% block body %}
+<div id="pusher" class="pusher" style="padding-top:50px">
+<table id="example1" class="display" style="width: 88%;height:80%;">
+    <thead>
+    <tr>
+        <th align="left">分析部门</th>
+        <th align="left">sfs费用</th>
+        <th align="left">obs费用</th>
+        <th align="left">计算费用</th>
+        <th align="left">费用合计</th>
+        <th align="left">账单日期</th>
+    </tr>
+    </thead>
+</table>
+<script type="text/javascript   ">
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            'ajax': '{% url 'moni:get_total' %}',
+            'columns': [
+                {'data': 'department'},
+                {'data': 'sfs'},
+                {'data': 'obs'},
+                {'data': 'ecs'},
+                {'data': 'total'},
+                {'data': 'date'},
+            ],
+            'language': {
+                'url': '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Chinese.json' // 以中文显示
+            },
+            "pageLength": 20,
+            buttons: ['excel','csv','copy'],
+            "lengthMenu": [10, 25, 50, 75, 100],
+            dom: 'Bfrtip',
+        })
+    })
+</script>
+{% endblock body %}

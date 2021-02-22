@@ -1,0 +1,39 @@
+{% load static %}
+<!--<!DOCTYPE html>-->
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>运维管理平台</title>
+    <link rel="stylesheet" href="{% static 'Semantic-UI-CSS-master/semantic.min.css' %}">
+    <script src="{% static 'jquery/jquery-3.4.1.js' %}"></script>
+    <script type="text/javascript" src="{% static 'Semantic-UI-CSS-master/semantic.js' %}"></script>
+    <script src="{% static 'datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'datatables/dataTables.semanticui.min.js' %}"></script>
+    <script src="{% static 'jquery/jquery-3.4.1.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" >
+    <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet" >
+    <link rel="stylesheet" href="{% static 'datatables/dataTables.semanticui.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.4.2/css/buttons.dataTables.css"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.flash.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.html5.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.print.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.print.js"></script>
+    <script type="text/javascript" src="https://cdn.staticfile.org/echarts/5.0.2/echarts.min.js"></script>
+</head>
+<body>
+<!-- 引入导航栏 -->
+{% include 'monitor/header.html' %}
+<!-- 预留具体页面的位置 -->
+{% block body %}{% endblock body %}
+<!-- 引入注脚 -->
+{% include 'monitor/footer.html' %}
+</body>
+</html>

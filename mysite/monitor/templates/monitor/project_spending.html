@@ -1,0 +1,30 @@
+{% extends "monitor/base.html" %}
+{% block body %}
+<div id="pusher" class="pusher" style="padding-top:50px">
+<table id="example1" class="display" style="width: 88%;height:80%;">
+    <thead>
+    <tr>
+        <th align="left">项目编号</th>
+        <th align="left">累计费用(元)</th>
+    </tr>
+    </thead>
+</table>
+<script type="text/javascript   ">
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            'ajax': '{% url 'moni:get_project_spending' %}',
+            'columns': [
+                {'data': 'project'},
+                {'data': 'spending'},
+            ],
+            'language': {
+                'url': '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Chinese.json' // 以中文显示
+            },
+            "pageLength": 100,
+            buttons: ['excel','csv','copy'],
+            "lengthMenu": [10, 25, 50, 75, 100],
+            dom: 'Bfrtip',
+        })
+    })
+</script>
+{% endblock body %}

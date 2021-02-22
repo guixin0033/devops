@@ -1,0 +1,118 @@
+<div class="ui container">
+    <form class="ui form" method="post" action="">
+        {% csrf_token %}
+<!--        <h3>华为云</h3>-->
+        <h3 class="ui header" id="data_filter">数据筛选</h3>
+        <div class="field">
+<!--            <div class="fields">-->
+                <div class="sixteen wide field">
+                    <select name="pro" id="pro" class="ui fluid search dropdown">
+                        {% for item in list_select %}
+                            <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+<!--            </div>-->
+        </div>
+        <div class="ui buttons">
+            <input class="ui black button" type="button" id="AJAX_get" value="查询">
+        </div>
+
+    </form>
+</div>
+<script type="text/javascript">
+    $('#AJAX_get').click(function (){
+        var data= {
+            "pro":$('#pro').val(),
+        };
+        // Pyecharts图表初始化
+        var chart1 = echarts.init(document.getElementById('dir'));
+        // chart.showLoading();
+        $.ajax({
+            url:"/moni/getDir/",
+            // url: '{% url 'moni:getDir' %}',
+            type:'GET',
+            datatype:'json',
+            data:data,
+            success:function (ret){
+                chart1.clear();
+                chart1.setOption({
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b}: {c} ({d}%)'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 10,
+                            data:ret.name
+                        },
+                        series: [
+                            {
+                                name: '分析目录',
+                                type: 'pie',
+                                selectedMode: 'single',
+                                radius: [0, '30%'],
+
+                                label: {
+                                    position: 'inner'
+                                },
+                                labelLine: {
+                                    show: false
+                                },
+                                data: ret.data2
+                            },
+                            {
+                                name: '分析目录',
+                                type: 'pie',
+                                radius: ['40%', '55%'],
+                                label: {
+                                    formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+                                    backgroundColor: '#eee',
+                                    borderColor: '#aaa',
+                                    borderWidth: 1,
+                                    borderRadius: 4,
+                                    // shadowBlur:3,
+                                    // shadowOffsetX: 2,
+                                    // shadowOffsetY: 2,
+                                    // shadowColor: '#999',
+                                    // padding: [0, 7],
+                                    rich: {
+                                        a: {
+                                            color: '#999',
+                                            lineHeight: 22,
+                                            align: 'center'
+                                        },
+                                        // abg: {
+                                        //     backgroundColor: '#333',
+                                        //     width: '100%',
+                                        //     align: 'right',
+                                        //     height: 22,
+                                        //     borderRadius: [4, 4, 0, 0]
+                                        // },
+                                        hr: {
+                                            borderColor: '#aaa',
+                                            width: '100%',
+                                            borderWidth: 0.5,
+                                            height: 0
+                                        },
+                                        b: {
+                                            fontSize: 16,
+                                            lineHeight: 33
+                                        },
+                                        per: {
+                                            color: '#eee',
+                                            backgroundColor: '#334455',
+                                            padding: [2, 4],
+                                            borderRadius: 2
+                                        }
+                                    }
+                                },
+                                data:ret.data
+                            }
+                        ]
+                });
+            },
+
+        });
+    })
+</script>

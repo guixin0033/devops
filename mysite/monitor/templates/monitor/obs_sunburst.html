@@ -1,0 +1,155 @@
+{% extends "monitor/base.html" %}
+{% csrf_token %}
+{% block body %}
+<div id="pusher" class="pusher" style="padding-top:50px">
+<div id="main" style="width: 100%;height:100%;"></div>
+<script type="text/javascript">
+    var meta_dir = {{ META_dir|safe }}
+    var meta_size = {{ META_size|safe }}
+    var meta_dir3 = meta_dir[3]
+    var meta_size3 = meta_size[3]
+    var meta_dir2 = meta_dir[2]
+    var meta_size2 = meta_size[2]
+    var meta_dir1 = meta_dir[1]
+    var meta_size1 = meta_size[1]
+    var res_dir = {{ RES_dir|safe }}
+    var res_size = {{ RES_size|safe }}
+    var res_dir0 = res_dir[0]
+    var res_size0 = res_size[0]
+    var res_dir1 = res_dir[1]
+    var res_size1 = res_size[1]
+    var res_dir2 = res_dir[2]
+    var res_size2 = res_size[2]
+    var res_dir3 = res_dir[3]
+    var res_size3 = res_size[3]
+    var res_dir4 = res_dir[4]
+    var res_size4 = res_size[4]
+    var med_dir = {{ MED_dir|safe }}
+    var med_size = {{ MED_size|safe }}
+    var med_dir1 = med_dir[1]
+    var med_size1 = med_size[1]
+    var med_dir2 = med_dir[2]
+    var med_size2 = med_size[2]
+    var med_dir0 = med_dir[0]
+    var med_size0 = med_size[0]
+    var med_dir5 = med_dir[5]
+    var med_size5 = med_size[5]
+    var Three_genome_dir = {{ Three_genome_dir|safe }}
+    var Three_genome_size = {{ Three_genome_size|safe }}
+    var Three_genome_dir2 = Three_genome_dir[2]
+    var Three_genome_size2 = Three_genome_size[2]
+    var Three_genome_dir3 = Three_genome_dir[3]
+    var Three_genome_size3 = Three_genome_size[3]
+    var Three_genome_dir1 = Three_genome_dir[1]
+    var Three_genome_size1 = Three_genome_size[1]
+    var rna_dir = {{ RNA_dir|safe }}
+    var rna_size = {{ RNA_size|safe }}
+    var rna_dir4 = rna_dir[4]
+    var rna_size4 = rna_size[4]
+    var rna_dir5 = rna_dir[5]
+    var rna_size5 = rna_size[5]
+    var rna_dir2 = rna_dir[2]
+    var rna_size2 = rna_size[2]
+    var rna_dir3 = rna_dir[3]
+    var rna_size3 = rna_size[3]
+    var dna_dir = {{ DNA_dir|safe }}
+    var dna_size = {{ DNA_size|safe }}
+    var dna_dir4 = dna_dir[4]
+    var dna_size4 = dna_size[4]
+    var dna_dir5 = dna_dir[5]
+    var dna_size5 = dna_size[5]
+    var dna_dir0 = dna_dir[0]
+    var dna_size0 = dna_size[0]
+    var dna_dir1 = dna_dir[1]
+    var dna_size1 = dna_size[1]
+    var myChart = echarts.init(document.getElementById('main'));
+    var data = [{
+    name: 'META',
+    itemStyle: {
+        color: '#da0d68'
+    },
+    children: [{name: meta_dir3,itemStyle: {color: '#975e6d'},children: [{name:meta_size3 ,value: meta_size3,itemStyle: {color: '#f99e1c'}}]}, {name:meta_dir2 ,itemStyle: {color: '#e0719c'},children: [{name:meta_size2 ,value: meta_size2,itemStyle: {color: '#f99e1c'}}]},{name: meta_dir1,itemStyle: {color: '#3e0317'},children: [{name:meta_size1 ,value: meta_size1,itemStyle: {color: '#f99e1c'}}]},]
+    },
+    {
+    name: 'RES',
+    itemStyle: {
+        color: '#b09733'
+    },
+    children: [{name: res_dir0,itemStyle: {color: '#f99e1c'},children: [{name:res_size0 ,value: res_size0,itemStyle: {color: '#f99e1c'}}]}, {name:res_dir1 ,itemStyle: {color: '#ef5a78'},children: [{name:res_size1 ,value: res_size1,itemStyle: {color: '#f99e1c'}}]},{name: res_dir2,itemStyle: {color: '#f7f1bd'},children: [{name:res_size2 ,value: res_size2,itemStyle: {color: '#f99e1c'}}]},{name: res_dir3,itemStyle: {color: '#d78823'},children: [{name:res_size3 ,value: res_size3,itemStyle: {color: '#f99e1c'}}]},{name: res_dir4,itemStyle: {color: '#f89a80'},children: [{name:res_size4 ,value: res_size4,itemStyle: {color: '#f99e1c'}}]},]
+    },
+    {
+    name: 'MED',
+    itemStyle: {
+        color: '#e1c315'
+    },
+    children: [{name: med_dir1,itemStyle: {color: '#da1d23'},children: [{name:med_size1 ,value: med_size1,itemStyle: {color: '#f99e1c'}}]}, {name:med_dir2 ,itemStyle: {color: '#dd4c51'},children: [{name:med_size2 ,value: med_size2,itemStyle: {color: '#f99e1c'}}]},{name: med_dir0,itemStyle: {color: '#e62969'},children: [{name:med_size0 ,value: med_size0,itemStyle: {color: '#f99e1c'}}]},{name: med_dir5,itemStyle: {color: '#6569b0'},children: [{name:med_size5 ,value: med_size5,itemStyle: {color: '#f99e1c'}}]},]
+    },
+    {
+    name: '3D',
+    itemStyle: {
+        color: '#f7a128'
+    },
+    children: [{name: Three_genome_dir2,itemStyle: {color: '#c94a44'},children: [{name: Three_genome_size2,value: Three_genome_size2,itemStyle: {color: '#f99e1c'}}]}, {name:Three_genome_dir3 ,itemStyle: {color: '#b53b54'},children: [{name: Three_genome_size3,value: Three_genome_size3,itemStyle: {color: '#f99e1c'}}]},{name: Three_genome_dir1,itemStyle: {color: '#a5446f'},children: [{name: Three_genome_size1,value: Three_genome_size1,itemStyle: {color: '#f99e1c'}}]},]
+    },
+    {
+    name: 'RNA',
+    itemStyle: {
+        color: '#dd4c51'
+    },
+    children: [{name: rna_dir2,itemStyle: {color: '#e73451'},children: [{name: rna_size2,value: rna_size2,itemStyle: {color: '#f99e1c'}}]}, {name:rna_dir4 ,itemStyle: {color: '#e65656'},children: [{name: rna_size4,value: rna_size4,itemStyle: {color: '#f99e1c'}}]},{name: rna_dir3,itemStyle: {color: '#f89a1c'},children: [{name: rna_size3,value: rna_size3,itemStyle: {color: '#f99e1c'}}]},{name: rna_dir5,itemStyle: {color: '#ae341f'},children: [{name: rna_size5,value: rna_size5,itemStyle: {color: '#f99e1c'}}]}]
+    },
+    {
+    name: 'DNA',
+    itemStyle: {
+        color: '#dd4c51'
+    },
+    children: [{name: dna_dir0,itemStyle: {color: '#e73451'},children: [{name: dna_size0,value: dna_size0,itemStyle: {color: '#f99e1c'}}]}, {name:dna_dir4 ,itemStyle: {color: '#e65656'},children: [{name: dna_size4,value: dna_size4,itemStyle: {color: '#f99e1c'}}]},{name: dna_dir5,itemStyle: {color: '#f89a1c'},children: [{name: dna_size5,value: dna_size5,itemStyle: {color: '#f99e1c'}}]},{name: dna_dir1,itemStyle: {color: '#ae341f'},children: [{name: dna_size1,value: dna_size1,itemStyle: {color: '#f99e1c'}}]}]
+    },
+    ];
+
+option = {
+    title: {
+                text: '华为云二级存储结构展示',
+                textStyle: {
+                    fontSize: 18,
+                    align: 'center'
+                },
+            },
+    series: {
+                type: 'sunburst',
+                highlightPolicy: 'ancestor',
+                data: data,
+                radius: [0, '95%'],
+                sort: null,
+                levels: [{}, {
+                    r0: '15%',
+                    r: '35%',
+                    itemStyle: {
+                        borderWidth: 2
+                    },
+                    label: {
+                        rotate: 'tangential'
+                    }
+                }, {
+                    r0: '35%',
+                    r: '70%',
+                    label: {
+                        align: 'right'
+                    }
+                }, {
+                    r0: '70%',
+                    r: '72%',
+                    label: {
+                        position: 'outside',
+                        padding: 3,
+                        silent: false
+                    },
+                    itemStyle: {
+                        borderWidth: 3
+                    }
+                }]
+            }
+        };
+    myChart.setOption(option);
+</script>
+{% endblock body %}

@@ -1,0 +1,121 @@
+{% extends "monitor/base.html" %}
+<!-- 隐藏分隔条 -->
+<!--<div class="ui hidden divider"></div>-->
+{% csrf_token %}
+<!-- 写入 base.html 中定义的 body content -->
+{% block body %}
+<div id="pusher" class="pusher" style="padding-top:50px">
+<div id="main" style="width: 100%;height:100%;"></div>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+    var option = {
+            title: {
+                text: '华为云二级存储费用展示(单位：元)',
+                textStyle: {
+                    fontSize: 18,
+                    align: 'center'
+                },
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data: ['基因组', '转录组', '三维', '微生物', '重测序', '医学']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value'
+            },
+            yAxis: {
+                type: 'category',
+                data: {{ time|safe }}
+            },
+            series: [
+                {
+                    name: '基因组',
+                    type: 'bar',
+                    stack: 'total',
+                    label: {
+                        show: true,
+                    },
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: {{ dna|safe }}
+                },
+                {
+                    name: '转录组',
+                    type: 'bar',
+                    stack: 'total',
+                    label: {
+                        show: true,
+                    },
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: {{ rna|safe }}
+                },
+                {
+                    name: '三维',
+                    type: 'bar',
+                    stack: 'total',
+                    label: {
+                        show: true,
+                    },
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: {{ 3d|safe }}
+                },
+                {
+                    name: '微生物',
+                    type: 'bar',
+                    stack: 'total',
+                    label: {
+                        show: true,
+                    },
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: {{ meta|safe }}
+                },
+                {
+                    name: '重测序',
+                    type: 'bar',
+                    stack: 'total',
+                    label: {
+                        show: true,
+                    },
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: {{ res|safe }}
+                },
+                {
+                    name: '医学',
+                    type: 'bar',
+                    stack: 'total',
+                    label: {
+                        show: true,
+                    },
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: {{ med|safe }}
+                }
+
+            ]
+        };
+    myChart.setOption(option);
+</script>
+
+
+{% endblock body %}

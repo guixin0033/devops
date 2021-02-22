@@ -1,0 +1,84 @@
+{% extends "monitor/base.html" %}
+<!-- 隐藏分隔条 -->
+<!--<div class="ui hidden divider"></div>-->
+{% csrf_token %}
+<!-- 写入 base.html 中定义的 body content -->
+{% block body %}
+<div id="pusher" class="pusher" style="padding-top:50px">
+<div id="main" style="width: 100%;height:100%;"></div>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+    var option = {
+        title: {
+                text: '华为云近半年费用发展趋势(单位：元）',
+                textStyle: {
+                    fontSize: 18,
+                    align: 'center'
+                },
+            },
+        legend: {},
+        tooltip: {
+            trigger: 'axis',
+            showContent: false
+        },
+        dataset: {
+            source: [
+                ['product', '2020-08', '2020-09', '2020-10', '2020-11', '2020-12', '2021-01'],
+                ['基因组', 45591, 58901, 54055, 59165, 67438, 66150],
+                ['三维', 42256, 52884, 56289, 57799, 57799, 52308],
+                ['转录组', 12546, 17426, 20447, 22402, 22402, 24123],
+                ['重测序', 8685, 7561, 8278, 7740, 10284, 9337],
+                ['医学', 14915, 21574, 22802, 22828, 22828, 18448],
+                ['微生物', 7048, 5846, 6256, 2432, 6102, 5860],
+            ]
+        },
+        xAxis: {type: 'category'},
+        yAxis: {gridIndex: 0},
+        grid: {top: '55%'},
+        series: [
+            {type: 'line', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+            {type: 'line', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+            {type: 'line', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+            {type: 'line', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+            {type: 'line', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+            {type: 'line', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+            {
+                type: 'pie',
+                id: 'pie',
+                radius: '30%',
+                center: ['50%', '25%'],
+                emphasis: {focus: 'data'},
+                label: {
+                    formatter: '{b}: {@2020-08} ({d}%)'
+                },
+                encode: {
+                    itemName: 'product',
+                    value: '2020-08',
+                    tooltip: '2020-08'
+                }
+            }
+        ]
+    };
+    myChart.on('updateAxisPointer', function (event) {
+        var xAxisInfo = event.axesInfo[0];
+        if (xAxisInfo) {
+            var dimension = xAxisInfo.value + 1;
+            myChart.setOption({
+                series: {
+                    id: 'pie',
+                    label: {
+                        formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                    },
+                    encode: {
+                        value: dimension,
+                        tooltip: dimension
+                    }
+                }
+            });
+        }
+    });
+    myChart.setOption(option);
+</script>
+
+
+{% endblock body %}

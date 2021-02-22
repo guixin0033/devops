@@ -1,0 +1,29 @@
+<div class="ui large top fixed inverted menu">
+    <div class="ui container">
+        <a href={% url "moni:sfs_size" %} class="item">sfs</a>
+        <a href={% url "moni:obs_size" %} class="item">obs</a>
+        <a href={% url "moni:sfs_spending" %} class="item">sfs开销</a>
+        <a href={% url "moni:obs_spending" %} class="item">obs开销</a>
+        <a href={% url "moni:project" %} class="item">项目统计</a>
+        <a href={% url "moni:project_spending" %} class="item">项目费用</a>
+        <a href={% url "moni:sfs_sunburst" %} class="item">sfs旭日图</a>
+        <a href={% url "moni:obs_sunburst" %} class="item">obs旭日图</a>
+        <a href={% url "moni:huawei_spending" %} class="item">分析部门预算</a>
+        <a href={% url "moni:huawei_spending_structure" %} class="item">华为云费用构成</a>
+        <a href={% url "moni:total" %} class="item">部门账单</a>
+    </div>
+    <div class="right menu">
+        {%  if not request.user.username  %}
+            <div class="ui item">
+                未登录
+            </div>
+        {% else %}
+            <div class="ui item">
+                {{ request.user.username }}
+            </div>
+            <a class="ui item" href="{% url 'logout' %}">
+                退出登陆
+            </a>
+        {% endif %}
+    </div>
+</div>
