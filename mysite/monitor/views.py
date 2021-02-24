@@ -7,34 +7,15 @@ import json
 from django.contrib.auth.decorators import login_required
 import datetime
 from collections import defaultdict
+import pandas as pd
+from pandas.core.frame import DataFrame
+import numpy as np
 @login_required
 def total(request):
     return render(request,'monitor/total.html')
 @login_required
 def get_total(request):
-    sfs_list = []
-    obs_list = []
-    for data_info in get_sfs_1.objects.all():
-        sfs_list.append({
-            'dna_sfs':data_info.dna_sfs_spending,
-            'rna_sfs':data_info.rna_sfs_spending,
-            'three_genome_sfs':data_info.three_genome_sfs_spending,
-            'meta_sfs':data_info.meta_sfs_spending,
-            'res_sfs':data_info.res_sfs_spending,
-            'med_sfs':data_info.med_sfs_spending,
-            'sfs_time':data_info.sfs_time,
-        })
-    for data_info in get_obs_1.objects.all():
-        obs_list.append({
-            'dna_obs':data_info.dna_obs_spending,
-            'rna_obs':data_info.rna_obs_spending,
-            'three_genome_obs':data_info.three_genome_obs_spending,
-            'meta_obs':data_info.meta_obs_spending,
-            'res_obs':data_info.res_obs_spending,
-            'med_obs':data_info.med_obs_spending,
-            'obs_time':data_info.obs_time,
-        })
-    data_dic = {}
+    data_dict = {}
     data_total = []
     dna_sfs_list = []
     rna_sfs_list = []
@@ -42,62 +23,105 @@ def get_total(request):
     meta_sfs_list = []
     res_sfs_list = []
     med_sfs_list = []
+    time_sfs_list = []
     dna_obs_list = []
     rna_obs_list = []
-    meta_obs_list = []
     three_genome_obs_list = []
+    meta_obs_list = []
     res_obs_list = []
     med_obs_list = []
-    for line in sfs_list:
-        if line['sfs_time'].strftime('%Y-%m-%d') < '2021-02-01':
-            dna_sfs_list.append(line['dna_sfs'])
-            rna_sfs_list.append(line['rna_sfs'])
-            three_genome_sfs_list.append(line['three_genome_sfs'])
-            meta_sfs_list.append(line['meta_sfs'])
-            res_sfs_list.append(line['res_sfs'])
-            med_sfs_list.append(line['med_sfs'])
-    for line in obs_list:
-        if line['obs_time'].strftime('%Y-%m-%d') < '2021-02-01':
-            dna_obs_list.append(line['dna_obs'])
-            rna_obs_list.append(line['rna_obs'])
-            three_genome_obs_list.append(line['three_genome_obs'])
-            meta_obs_list.append(line['meta_obs'])
-            res_obs_list.append(line['res_obs'])
-            med_obs_list.append(line['med_obs'])
-    dna_sfs_total = sum(dna_sfs_list)
-    rna_sfs_total = sum(rna_sfs_list)
-    three_genome_sfs_total = sum(three_genome_sfs_list)
-    meta_sfs_total = sum(meta_sfs_list)
-    res_sfs_total = sum(res_sfs_list)
-    med_sfs_total = sum(med_sfs_list)
-    dna_obs_total = sum(dna_obs_list)
-    rna_obs_total = sum(rna_obs_list)
-    three_genome_obs_total = sum(three_genome_obs_list)
-    meta_obs_total = sum(meta_obs_list)
-    res_obs_total = sum(res_obs_list)
-    med_obs_total = sum(med_obs_list)
-    department = ['基因组','转录组','三维','微生物','重测序','医学']
-    sfs_total = [dna_sfs_total, rna_sfs_total, three_genome_sfs_total, meta_sfs_total, res_sfs_total,med_sfs_total]
-    obs_total = [dna_obs_total, rna_obs_total, three_genome_obs_total, meta_obs_total, res_obs_total,med_obs_total]
-    ecs_total = [42044, 6018, 17095, 2006, 4012, 4012]
-    date = '2021-01'
-    def list_add(a, b):
-        c = []
-        for i in range(len(a)):
-            c.append(a[i] + b[i])
-        return c
-    total = list_add(list_add(sfs_total,obs_total),ecs_total)
-    for i in range(len(total)):
-        data_total.append({
-            'sfs':sfs_total[i],
-            'obs':obs_total[i],
-            'department':department[i],
-            'ecs':ecs_total[i],
-            'total':total[i],
-            'date':date,
-        })
-    data_dic['data'] = data_total
-    return HttpResponse(json.dumps(data_dic))
+    time_obs_list = []
+    for data_info in get_sfs_1.objects.all():
+        dna_sfs_list.append(data_info.dna_sfs_spending)
+        rna_sfs_list.append(data_info.rna_sfs_spending)
+        three_genome_sfs_list.append(data_info.three_genome_sfs_spending)
+        meta_sfs_list.append(data_info.meta_sfs_spending)
+        res_sfs_list.append(data_info.res_sfs_spending)
+        med_sfs_list.append(data_info.med_sfs_spending)
+        time_sfs_list.append(data_info.sfs_time)
+    total_sfs_list = {
+        'dna_sfs_list':dna_sfs_list,
+        'rna_sfs_list':rna_sfs_list,
+        'three_genome_sfs_list':three_genome_sfs_list,
+        'meta_sfs_list':meta_sfs_list,
+        'res_sfs_list':res_sfs_list,
+        'med_sfs_list':med_sfs_list,
+        'time_sfs_list':time_sfs_list,
+    }
+    data_sfs = DataFrame(total_sfs_list)
+    data_sfs['time_sfs_list'] = pd.to_datetime(data_sfs['time_sfs_list'])
+    data_sfs = data_sfs.set_index('time_sfs_list')
+    data_sfs_M = data_sfs.resample('M').sum()
+    data_sfs_M_index = data_sfs_M.index.tolist()
+    data_sfs_M_dna = data_sfs_M['dna_sfs_list'].tolist()
+    data_sfs_M_rna = data_sfs_M['rna_sfs_list'].tolist()
+    data_sfs_M_three_genome = data_sfs_M['three_genome_sfs_list'].tolist()
+    data_sfs_M_meta = data_sfs_M['meta_sfs_list'].tolist()
+    data_sfs_M_res = data_sfs_M['res_sfs_list'].tolist()
+    data_sfs_M_med = data_sfs_M['med_sfs_list'].tolist()
+    for data_info in get_obs_1.objects.all():
+        dna_obs_list.append(data_info.dna_obs_spending)
+        rna_obs_list.append(data_info.rna_obs_spending)
+        three_genome_obs_list.append(data_info.three_genome_obs_spending)
+        meta_obs_list.append(data_info.meta_obs_spending)
+        res_obs_list.append(data_info.res_obs_spending)
+        med_obs_list.append(data_info.med_obs_spending)
+        time_obs_list.append(data_info.obs_time)
+    total_obs_list = {
+        'dna_obs_list':dna_obs_list,
+        'rna_obs_list':rna_obs_list,
+        'three_genome_obs_list':three_genome_obs_list,
+        'meta_obs_list':meta_obs_list,
+        'res_obs_list':res_obs_list,
+        'med_obs_list':med_obs_list,
+        'time_obs_list':time_obs_list,
+    }
+    data_obs = DataFrame(total_obs_list)
+    data_obs['time_obs_list'] = pd.to_datetime(data_obs['time_obs_list'])
+    data_obs = data_obs.set_index('time_obs_list')
+    data_obs_M = data_obs.resample('M').sum()
+    data_obs_M_index = data_obs_M.index.tolist()
+    data_obs_M_dna = data_obs_M['dna_obs_list'].tolist()
+    data_obs_M_rna = data_obs_M['rna_obs_list'].tolist()
+    data_obs_M_three_genome = data_obs_M['three_genome_obs_list'].tolist()
+    data_obs_M_meta = data_obs_M['meta_obs_list'].tolist()
+    data_obs_M_res = data_obs_M['res_obs_list'].tolist()
+    data_obs_M_med = data_obs_M['med_obs_list'].tolist()
+    dna_ecs_spending = []
+    rna_ecs_spending = []
+    three_genome_ecs_spending = []
+    meta_ecs_spending = []
+    res_ecs_spending = []
+    med_ecs_spending = []
+    for data_info in get_ecs_spending.objects.all():
+        rna_ecs_spending.append(data_info.rna_ecs_spending)
+        dna_ecs_spending.append(data_info.dna_ecs_spending)
+        three_genome_ecs_spending.append(data_info.three_genome_ecs_spending)
+        meta_ecs_spending.append(data_info.meta_ecs_spending)
+        res_ecs_spending.append(data_info.res_ecs_spending)
+        med_ecs_spending.append(data_info.med_ecs_spending)
+    ecs_total = [rna_ecs_spending,dna_ecs_spending,three_genome_ecs_spending,meta_ecs_spending,res_ecs_spending,med_ecs_spending]
+    department = ['转录组', '基因组', '三维', '微生物', '重测序', '医学']
+    sfs_total = [data_sfs_M_rna,data_sfs_M_dna,data_sfs_M_three_genome,data_sfs_M_meta,data_sfs_M_res,data_sfs_M_med]
+    obs_total = [data_obs_M_rna, data_obs_M_dna, data_obs_M_three_genome, data_obs_M_meta, data_obs_M_res,data_obs_M_med]
+    total = np.array(ecs_total) + np.array(sfs_total) + np.array(obs_total)
+    total_list = total.tolist()
+    time_list = []
+    for line in data_sfs_M_index:
+        line = line.strftime('%Y-%m-%d')
+        time_list.append(line)
+    for i in range(len(time_list)):
+        for j in range(len(sfs_total)):
+            data_total.append({
+                'department':department[j],
+                'sfs':sfs_total[j][i],
+                'obs':obs_total[j][i],
+                'date':time_list[i][0:7],
+                'ecs':ecs_total[j][i],
+                'total':total_list[j][i],
+            })
+    data_dict['data'] = data_total
+    return HttpResponse(json.dumps(data_dict))
 @login_required
 def project(request):
     return render(request,'monitor/project.html')

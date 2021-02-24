@@ -103,4 +103,13 @@ class get_obs_dir(models.Model):
     obs_dir_size = models.IntegerField(default=0)
     obs_dir_spending = models.IntegerField(default=0)
     obs_dir_time = models.DateTimeField(default=timezone.now)
+
+class get_ecs_spending(models.Model):
+    rna_ecs_spending = models.IntegerField(default=0)
+    dna_ecs_spending = models.IntegerField(default=0)
+    three_genome_ecs_spending = models.IntegerField(default=0)
+    meta_ecs_spending = models.IntegerField(default=0)
+    res_ecs_spending = models.IntegerField(default=0)
+    med_ecs_spending = models.IntegerField(default=0)
+    ecs_spending_time = models.DateTimeField(default=timezone.now)
 #

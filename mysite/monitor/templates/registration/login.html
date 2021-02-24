@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <title>数据管理平台</title>
+    <title>devops</title>
     <link rel="stylesheet" href="{% static 'Semantic-UI-CSS-master/semantic.min.css' %}">
     <script src="{% static 'jquery/jquery-3.4.1.js' %}"></script>
     <script type="text/javascript" src="{% static 'Semantic-UI-CSS-master/semantic.js' %}"></script>
@@ -11,14 +11,9 @@
     <script src="{% static 'echarts/china.js' %}"></script>
 </head>
 <body>
-    <div id="pusher" class="pusher" style="padding-top:200px">
+    <div id="pusher" class="pusher" style="padding-top:250px">
         <div class="ui middle aligned center aligned grid">
             <div class="column">
-                <h2 class="ui image header">
-                    <div class="content">
-                        devops
-                    </div>
-                </h2>
                 <form method="post" action="{% url 'login' %}" class="ui large form">
                     {% csrf_token %}
                     {% if next %}
@@ -28,7 +23,12 @@
                             <div class="ui info message">未登录用户没有权限浏览当前页面，请登录</div>
                         {% endif %}
                     {% endif %}
-                    <div class="ui stacked secondary  segment">
+                        <div class="ui stacked secondary  segment">
+                        <h2 class="ui image header">
+                        <div class="content">
+                            华为云在线数据管理系统
+                        </div>
+                        </h2>
                         <div class="field">
                             <div class="ui left icon input">
                                 <i class="user icon"></i>
@@ -41,7 +41,7 @@
                                 {{ form.password }}
                             </div>
                         </div>
-                        <input class="ui fluid large blue submit button" type="submit" value="login">
+                        <input class="ui fluid large blue submit button" type="submit" value="登录">
                         <input type="hidden" name="next" value="{{ next }}">
                     </div>
                     {% if form.errors %}
@@ -54,15 +54,15 @@
 </body>
 <style>
     body {
-        background-color: silver;
+        background-color: #404040;
     }
 
     body > .grid {
-        height: 300%;
+        height: 500%;
     }
 
     .column {
-        max-width: 300px;
+        max-width: 380px;
     }
 
     .ui.footer.segment {
